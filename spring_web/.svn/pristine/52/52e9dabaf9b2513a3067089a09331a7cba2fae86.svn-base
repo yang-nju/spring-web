@@ -1,0 +1,94 @@
+package com.jsc.shiro;
+
+import java.util.Collection;
+
+import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.jsc.shiro.bean.*;
+import com.jsc.shiro.test.*;
+
+
+public class MyJdbcRealm extends JdbcRealm{
+
+	@Autowired
+	private UserServiceI userService;
+	
+	//登录认证
+//	@Override
+//	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token){
+//		UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken)token;
+//		String username = String.valueOf(usernamePasswordToken.getUsername());
+//		User user = userService.findByUserName(username);
+//		AuthenticationInfo info = null;
+//		if(null != user){
+//			String password = new String(usernamePasswordToken.getPassword());
+//			if(password.equals(user.getPassword())){
+//				info = new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(),getName());
+//			}
+//		}
+//		return info;
+//	}
+	
+	@Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+
+        String username = (String)token.getPrincipal();
+
+        Users user = userService.findByUserName(username);
+
+        if(user == null) {
+            throw new UnknownAccountException();//没找到帐号
+        }
+
+        if(Boolean.TRUE.equals(user.getLock())) {
+            throw new LockedAccountException(); //帐号锁定
+        }
+
+        //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+                user.getUsername(), //用户名
+                user.getPassword(), //密码
+                ByteSource.Util.bytes(user.getUsername() + user.getSalt()),  //salt=username+salt
+                getName()  //realm name
+        );
+        return authenticationInfo;
+    }
+
+	
+	
+	//权限认证&授权
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals){
+		
+		principals.fromRealm(getName()).iterator().next();
+		
+		SimpleAuthorizationInfo info = null;
+		String userName = (String)principals.getPrimaryPrincipal();
+		if(userName != null && !userName.equals("")){
+			info = new SimpleAuthorizationInfo();
+			info.setRoles(userService.findRoleStr(userName));
+			info.setObjectPermissions(userService.findPermisionStr(userName));
+		}
+		
+		userName = (String)principals.fromRealm(getName()).iterator().next();
+		if(userName != null){
+			//查询用户授权信息
+			Collection<String> pers = userService.findRoleStr(userName);
+			if(pers != null && !pers.isEmpty()){
+				for(String each : pers){
+					info.addStringPermission(each);
+				}
+			}
+		}
+		
+		return info;
+	}
+	
+	
+	
+}

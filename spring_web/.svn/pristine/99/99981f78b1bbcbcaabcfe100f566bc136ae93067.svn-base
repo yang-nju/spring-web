@@ -1,0 +1,49 @@
+项目简介：基于spring 框架的web后端集成方案
+相关技术：
+	springframework
+	springMVC
+	shiro/springSecurity
+	hibernate/ibatis/spring jpa
+	
+工具：
+	eclipse / intelj IDEA
+	maven / Ant
+	svn / Git
+
+其它：
+	springSession
+	ehcache
+	redis
+	log4j/slf4j
+	apache/nginx
+	
+	
+若干关键点：
+	service有/无状态（单例）
+	http连接 session管理
+	数据库  session管理：sessionFactory、连接池
+	是否单例
+	是否懒加载
+	缓存：session缓存；sql缓存；分页；结果缓存；分级缓存 ；缓存持久化
+	内存管理：缓存影响、aop影响、日志影响
+	调优
+	
+异常（aop实现）：
+	可解决/当通知 异常：抛出运行时异常？？ 列表：资源不存在（数据、用户）；不可用（服务、网络）；没有权限
+	不可解决异常：抛出运行时异常，维护异常链，后端最上层捕获并记录日志。 列表：数据库异常（连接、查询、sql语句、事务、其它）；资源不足（内存、磁盘）；内部异常（空指针。。）
+	性能？？
+	后端解决方案：封装checked异常；不再捕获unchecked异常；不可解决异常一律封装为DaoException/ServiceException
+	
+日志（aop实现）：
+	操作日志：按需
+	错误日志：随异常处理记录
+	技术：接口采用log4j+slf4j(hibernate);实现采用log4j
+	
+数据分析：
+	mondrain
+	kylin
+	hadoop
+	hbase
+	spark
+	kafka
+	zookeeper

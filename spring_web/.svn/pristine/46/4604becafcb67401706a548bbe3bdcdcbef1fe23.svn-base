@@ -1,0 +1,43 @@
+package com.jsc.shiro.bean;
+
+import java.util.List;
+
+import org.hibernate.LockOptions;
+import org.hibernate.Query;
+
+import static org.hibernate.criterion.Example.create;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+
+
+public interface UsersDAOI {
+	
+	public void save(Users transientInstance) ;
+
+	public void delete(Users persistentInstance) ;
+
+	public Users findById(java.lang.Long id) ;
+
+	public List<Users> findByExample(Users instance) ;
+
+	public List findByProperty(String propertyName, Object value) ;
+
+	public List<Users> findByUsername(Object username) ;
+
+	public List<Users> findByPassword(Object password) ;
+
+	public List<Users> findBySalt(Object salt) ;
+
+	public List<Users> findByLock(Object lock) ;
+
+	public List findAll() ;
+
+	public Users merge(Users detachedInstance) ;
+
+	public void attachDirty(Users instance) ;
+
+	public void attachClean(Users instance) ;
+}

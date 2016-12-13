@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+       	http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd
+        ">
+        
+
+	
+	<context:property-placeholder location="classpath:application.properties" />  
+    <context:component-scan base-package="com.jsc.jdbc">
+    </context:component-scan>
+    
+    <!--         <cache:annotation-driven cache-manager="cacheManager" />     --> 
+  	
+    <!-- spring自己的缓存管理器，这里定义了两个缓存位置名称 ，即注解中的value；
+     	 spring可以管理多个cache，此处并非redis集群 -->
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">  
+        <property name="caches">  
+            <set>  
+                <bean class="org.cpframework.cache.redis.RedisCache">  
+                    <property name="redisTemplate" ref="redisTemplate" />  
+                    <property name="name" value="default"/>  
+                </bean>  
+                <bean class="org.cpframework.cache.redis.RedisCache">  
+                    <property name="redisTemplate" ref="redisTemplate02" />  
+                    <property name="name" value="commonCache"/>  
+                </bean>  
+            </set>  
+        </property>  
+    </bean>  
+    
+    
+    
+    <!-- Redis 相关配置 -->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">  
+        <property name="maxIdle" value="${redis.maxIdle}" />  
+        <property name="maxActive" value="${redis.maxActive}" />  
+        <property name="maxWait" value="${redis.maxWait}" />  
+        <property name="testOnBorrow" value="${redis.testOnBorrow}" />  
+    </bean>  
+     
+     <!--  
+     <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"  
+        p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:pool-config-ref="poolConfig"/>  
+      
+     
+      -->
+      
+    
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">  
+        <property name="connectionFactory"   ref="connectionFactory" />  
+    </bean>         
+    
+    
+    <!-- 
+    <bean id="connectionFactory2" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"  
+        p:host-name="${redis.host}" p:port="${redis.port}" p:password="${redis.pass}"  p:pool-config-ref="poolConfig"/>  
+      
+    
+     -->
+    
+    
+    <bean id="redisTemplate2" class="org.springframework.data.redis.core.RedisTemplate">  
+        <property name="connectionFactory"   ref="connectionFactory2" />  
+    </bean>
+    
+    
+    <!-- 
+    
+    
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor">
+   	</bean>
+    
+    
+    <bean id="persistenceExceptionTranslationPostProcessor"
+    class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    
+     -->
+    
+    
+    
+    
+</beans>

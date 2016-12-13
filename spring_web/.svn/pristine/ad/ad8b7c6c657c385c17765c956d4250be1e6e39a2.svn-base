@@ -1,0 +1,52 @@
+package com.jsc.service;
+
+import javax.transaction.Transactional;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+
+import com.jsc.shiro.bean.UsersDAO;
+
+/**
+ * 测试类可继承如下两个类：
+ * AbstractJUnit4SpringContextTests
+ * AbstractTransactionalJUnitSpringContextTests ： 用户测试事务相关
+ * 
+ * @author yangyang
+ *
+ */
+
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"classpath:application-test.xml"})
+
+@DirtiesContext(classMode=ClassMode.AFTER_EACH_TEST_METHOD)  //标记applicationcontext已经dirty，需要重新加载；主要用于关闭缓存对测试的影响
+
+//以下配置为了消除多用户测试数据耦合，代码执行完后自动回滚事务
+@Transactional
+@TransactionConfiguration(defaultRollback=true)
+
+
+public class TestService {
+	
+	@Autowired
+	private UsersDAO userDao;
+	
+	@Before
+	public void setUp(){
+		//
+	}
+	
+	@Test
+	public void testAddUser(){
+//		userDao
+	}
+	
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" isELIgnored="false" contentType="text/html; charset=UTF-8"  
+    pageEncoding="UTF-8"%> 
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<html>
+<title>hello</title>
+<body>
+这里是权限页面，只有用户${username } [<shiro:principal/>]可以访问！
+${name}
+${2+2}
+$(2+2)
+</body>
+</html>

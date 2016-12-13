@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       ">
+
+    <!-- spring 统一日志处理 -->
+    <bean id="logInterceptor" class="com.jsc.util.LogInterceptor"></bean>
+    
+    <!-- spring 统一异常处理 -->
+	<bean id="exceptionHandler" class="com.jsc.util.ExceptionAdvisor"></bean>
+	
+	<!--  bean 自动代理处理器 -->
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<value>commonDao</value>
+				<value>*Service</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<value>exceptionHandler</value>
+			<value>logInterceptor</value>
+			<!-- transcationInterceptor -->
+		</property>
+		
+	</bean>
+	
+	
+	
+	<!-- AspectJ 实现配置 ；对应于LogAdvisor类-->
+	<aop:aspectj-autoproxy />
+
+	<bean id="customerBo" class="com.mkyong.customer.bo.impl.CustomerBoImpl" />
+
+	<!-- Aspect -->
+	<bean id="logAspect" class="com.mkyong.aspect.LoggingAspect" />
+	
+	
+	
+	<!-- AspectJ + xml 实现方式配置 -->
+	<aop:config>
+
+	  <aop:aspect id="aspectLoggging" ref="logAspect" >
+	
+	    <!-- @AfterReturning -->
+	    <aop:pointcut id="pointCutAfterReturning"
+	      expression="execution(* com.mkyong.customer.bo.CustomerBo.addCustomerReturnValue(..))" />
+	
+	    <aop:after-returning method="logAfterReturning" returning="result" 
+	      pointcut-ref="pointCutAfterReturning" />
+	      
+      	<aop:around method="logAround" pointcut-ref="pointCutAround"/>
+				
+	  </aop:aspect>
+
+	</aop:config>
+	
+
+
+</beans>

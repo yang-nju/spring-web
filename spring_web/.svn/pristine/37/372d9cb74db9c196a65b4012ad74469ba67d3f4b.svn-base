@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+	<jsp:directive.page contentType="text/html; charset=utf-8" 
+		pageEncoding="utf-8" session="false"/>
+	<jsp:output doctype-root-element="html"
+		doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+		doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"
+		omit-xml-declaration="true" />
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+
+<h2>登录</h2>
+<form method="POST">
+   <table>
+    <tr>
+        <td><label path="username">Name</label></td>
+        <td><input path="username" /></td>
+    </tr>
+    <tr>
+        <td><label path="password">Password</label></td>
+        <td><input path="password" /></td>
+    </tr>
+    
+    <tr>
+        <td colspan="2">
+            <input type="submit" value="Submit"/>
+        </td>
+    </tr>
+</table>  
+</form>
+
+
+</body>
+</html>
+</jsp:root>

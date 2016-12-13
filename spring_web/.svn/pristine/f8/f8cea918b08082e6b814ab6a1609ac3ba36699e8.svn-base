@@ -1,0 +1,27 @@
+package com.jsc.shiro.test;
+
+import java.util.Set;
+
+import org.apache.shiro.authz.Permission;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.jsc.shiro.bean.*;
+
+@Service
+public class UserService implements UserServiceI{
+
+	@Autowired
+	private UsersDAOI userDao;
+	
+	public Users findByUserName(String username)
+	{	
+//		List ls = userDao.findByProperty("username", username);
+//		Users user = (Users)ls.get(0);
+//		System.out.println(user.getUsername());
+//		return user;
+		return null;
+	}
+	public Set<String> findRoleStr(String username){return null;}
+	public Set<Permission> findPermisionStr(String username){return null;}
+}

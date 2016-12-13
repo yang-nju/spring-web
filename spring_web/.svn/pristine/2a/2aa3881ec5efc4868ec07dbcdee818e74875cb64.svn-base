@@ -1,0 +1,14 @@
+package com.jsc.shiro.test;
+
+import java.util.Set;
+
+import org.apache.shiro.authz.Permission;
+
+import com.jsc.shiro.bean.Users;
+
+public interface UserServiceI {
+
+	public Users findByUserName(String username);
+	public Set<String> findRoleStr(String username);
+	public Set<Permission> findPermisionStr(String username);
+}
