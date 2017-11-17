@@ -20,13 +20,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CORSFilter implements Filter{
 
-	@Override
+//	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
+//	@Override
 	public void doFilter(ServletRequest arg0, ServletResponse arg1,
 			FilterChain arg2) throws IOException, ServletException {
 
@@ -40,7 +40,7 @@ public class CORSFilter implements Filter{
         arg2.doFilter(arg0, arg1);
 	}
 
-	@Override
+//	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
 		
